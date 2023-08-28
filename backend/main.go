@@ -10,7 +10,7 @@ import (
 func serveWS(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Host);
 
-	ws, err := websocket.Upgrader.Upgrade(w,r,nil);
+	ws, err := websocket.Upgrade(w,r);
 
 	if err != nil {
 		fmt.Println(err);

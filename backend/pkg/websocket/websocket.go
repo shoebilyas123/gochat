@@ -1,7 +1,6 @@
 package websocket
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -14,20 +13,14 @@ var Upgrader = websocket.Upgrader{
 	CheckOrigin: func (r *http.Request) bool {return true},
 }
 
-func Reader(conn *websocket.Conn) {
-	for {
-		mType, msg, err := conn.ReadMessage();
+func Upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 
-		if err != nil {
-			log.Fatal(err)
-			return;
-		}
-
-		fmt.Println(string(msg))
-
-		if err := conn.WriteMessage(mType, msg); err != nil {
-			log.Fatal(err);
-			return;
-		}
+	conn, err := Upgrader.Upgrade(w,r, nil);
+	
+	if err != nil {
+		log.Println(err);
+		return conn, err;
 	}
+
+	return conn, nil
 }
